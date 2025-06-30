@@ -1,0 +1,35 @@
+#include <stdio.h>
+#include <fcntl.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+
+int main()
+{
+	int fd;
+	char str[] = "Hello socket!!\n";
+
+	fd = open("hello.txt", O_CREAT | O_WRONLY);
+	if (fd < 0) {
+		perror("Could not open hello.txt\n");
+		exit(1);
+	}
+	if (write(fd, str, strlen(str) + 1) < 0 ) {
+		perror("Failed to write to file\n");
+		exit(1);
+	}
+
+	close(fd);
+
+	return 0;
+}
+
+/*
+
+#include <unistd.h>
+ssize_t write(int fd, const void* buf, size_t nbytes);
+
+파일권한 변경
+chmod 774 (사용자(7)|그룹(7)|다른 사용자(4))
+
+*/
