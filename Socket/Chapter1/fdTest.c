@@ -13,7 +13,7 @@ int main()
 	//fd3 = socket(PF_INET, SOCK_DGRAM, 0);
 
 	printf("fd 1 : %d\n", fd1); // 표준입력
-	printf("fd 2 : %d\n", fd2); // 표ㅈn 변ㄱ
+	printf("fd 2 : %d\n", fd2); 
 	printf("fd 3 : %d\n", fd3);
 
 	close(fd1);
