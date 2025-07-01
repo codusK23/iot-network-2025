@@ -29,3 +29,7 @@ void main()
 	printf("sin_addr: %#x\n", myaddr.sin_addr.s_addr);
 	printf("sin_port: %#x\n", myaddr.sin_port);
 }
+
+/*
+AF INET(주소체계) = PF_INET(프로토콜 패밀리)
+*/

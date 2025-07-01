@@ -99,6 +99,7 @@ IoT 네트워크 프로그래밍 리포지토리
 
 #### 기본 라이브러리
 - <stdio.h> : 입출력 함수
+    - perror() : 시스템 에러 메세지 출력
 - <stdlib.h> : 동적 메모리, 종료 함수(exit), 숫자 변환 함수 등
 - <string.h> : 문자열 처리 함수
 - <unistd.h> : 유닉스 시스템 함수(read, write, open, close, sleep ...)
@@ -122,12 +123,47 @@ IoT 네트워크 프로그래밍 리포지토리
 
 
 ## 2일차
+### OSI 7계층 TCP/IP 4계층 비교
+- 사진 추가
 
-### 구조체
+### 소켓 구조체 
+#### 기본 구조
+``` c
+struct sockaddr_in {
+    unsigned short sin_family;  // IPv4 주소 체계 (AF_INET)
+    struct in_addr sin_addr;    // IP 주소
+    uint16_t sin port;          // Port
+}
+```
+- 필요 라이브러리
+    -  <arpa/inet.h> : 주소 변환 함수 (inet_addr, inet_aton)
+- memset() : 구조체를 0으로 초기화 하는 데 사용. 쓰레기 값 제거 
 
-#include <arpa/inet.h>
+#### 바이트 정렬 함수
+- htons(), htonl() : 호스트 바이트 정렬 -> 네트워크 바이트 정렬
+- ntohs(), ntohl() : 네트워크 바이트 정렬 -> 호스트 바이트 정렬
 
+#### IP 주소 변환 함수
+- inet_pton() : 문자열 -> 숫자(네트워크 바이트 정렬)
+- inet_ntop() : 숫자 -> 문자열
+- inet_addr() : 문자열 -> 숫자 (IPv4만 지원)
+- inet_ntoa() : 숫자 -> 문자열 (IPv4만 지원)
 
+### 소켓 실습
+#### [client](./Socket/Chapter2/base_client.c)
+```c
+if(connect(sock_fd, (struct sockaddr*)&server_addr, sizeof(server_addr)) == -1){
+		close(sock_fd);
+		exit(1);
+	}
+```
+- connect() : 서버에 연결 요청
+- 실행 : ./base_client 127.0.0.1 9090
+
+#### [server](./Socket/Chapter2/base_server.c)
+- 실행 : ./base_server 9090
+
+    
 
 
 
