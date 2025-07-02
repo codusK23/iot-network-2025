@@ -24,5 +24,5 @@ int main()
 #include <fcntl.h>
 
 int open(const char* name, int flags)
-flags: O_RDONLY, O_WRONLY, O_RDWR, O_CREAT, O_TRUNC, O_AAEND)
+flags: O_RDONLY, O_WRONLY, O_RDWR, O_CREAT, O_TRUNC, O_AAEND
 */
