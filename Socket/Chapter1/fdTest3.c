@@ -11,11 +11,11 @@ int main()
 
 	fd = open("hello.txt", O_CREAT | O_WRONLY);
 	if (fd < 0) {
-		perror("Could not open hello.txt\n");
+		perror("Could not open hello.txt");
 		exit(1);
 	}
 	if (write(fd, str, strlen(str) + 1) < 0 ) {
-		perror("Failed to write to file\n");
+		perror("Failed to write to file");
 		exit(1);
 	}
 
