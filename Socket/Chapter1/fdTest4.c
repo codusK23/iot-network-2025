@@ -12,13 +12,13 @@ void main()
 	fd = open("hello.txt", O_RDONLY);
 
 	if (fd < 0) {
-		perror("Could not open\n");
+		perror("Could not open");
 		exit(1);
 	}
 
 	read_sz = read(fd, buf, sizeof(buf));
 	if (read_sz < 0){
-		perror("Failed to read from file\n");
+		perror("Failed to read from file");
 		exit(1);
 	}
 	printf("Read from file: %s\n", buf);
