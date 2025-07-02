@@ -124,7 +124,7 @@ IoT 네트워크 프로그래밍 리포지토리
 
 ## 2일차
 ### OSI 7계층 TCP/IP 4계층 비교
-- 사진 추가
+<img src="./Image/nw0001.png" width="600">
 
 ### 소켓 구조체 
 #### 기본 구조
@@ -150,7 +150,7 @@ struct sockaddr_in {
 - inet_ntoa() : 숫자 -> 문자열 (IPv4만 지원)
 
 ### 소켓 실습
-#### [client](./Socket/Chapter2/base_client.c)
+#### Client
 ```c
 if(connect(sock_fd, (struct sockaddr*)&server_addr, sizeof(server_addr)) == -1){
 		close(sock_fd);
@@ -159,15 +159,70 @@ if(connect(sock_fd, (struct sockaddr*)&server_addr, sizeof(server_addr)) == -1){
 ```
 - connect() : 서버에 연결 요청
 - 실행 : ./base_client 127.0.0.1 9090
+- [base_client](./Socket/Chapter2/base_client.c)
+- [echo_client](./Socket/Chapter2/echo_client.c)
 
-#### [server](./Socket/Chapter2/base_server.c)
+#### Server
+```c
+if((client_fd = accept(server_fd, (struct sockaddr*)&client_addr, &client_addr_len)) == -1){
+    perror("accept failed");
+    close(server_fd);
+    exit(1);
+}
+```
+- accept : 클라이언트의 요청 수락
 - 실행 : ./base_server 9090
+- [base_server](./Socket/Chapter2/base_server.c)
+- [echo_server](./Socket/Chapter2/echo_server.c)
 
     
+## 3일차
+### TCP
+#### TCP 동작 구조
+- Client -> Server 데이터 전송
+- 사진으로 설명
+
+#### TCP가 신뢰성 있는 이유
+- 정리해서 작성
+
+### 도메인 이름으로 IP 변환
+
+### 소켓 옵션
+- [소켓옵션](./Socket/Chapter3/socketopt.c)
 
 
 
 
+아크?
+UDP 소켓 통신
+
+TCP UDP 전송방식 차이
+TCP가 신뢰성 있는 이유 : 데이터 손실이 일어나면 재전송
+UDP -> 데이터 잘 받았는지 아닌지 신경 안 쓰고 데이터 막 보냄
+TIMEOUT
+TCP -> 데이터 보냄 -> 아크 확인 -> 데이터 재송신 또는 다음 데이터 ㅈ보냄
+UDP -> 아크 상관 안 하고 막 보냄
+
+4핸드 쉐이킹 -> TCP가 소켓을 끊을 때 데이터를 4번 주고 받음 -> 데이터 손실 방지 위함
+-> 교재 98p 참고
+
+#include <netdb.h>
+
+도메인으로 IP주소 얻기
+
+### 소켓옵션
+- so_reuseaddr : 소켓 주소 재사용
+- so keepalive
+- tcp_nodeLay
+
+### 다중 접속 서버 (Multi-Client-Server) -> PPT 참고 .. 계속
+- 멀티 프로세스 
+    - fork
+    - 관련 매크로 함수
+        - WIFEXITED ....
+- 멀티 플렉싱
+- 멀티 스레딩
 
 
-
+## 4일차
+### 다중 접속서버 (Multi-Client-Server)
