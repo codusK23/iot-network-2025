@@ -153,9 +153,9 @@ struct sockaddr_in {
 #### Client
 ```c
 if(connect(sock_fd, (struct sockaddr*)&server_addr, sizeof(server_addr)) == -1){
-		close(sock_fd);
-		exit(1);
-	}
+	close(sock_fd);
+	exit(1);
+}
 ```
 - connect() : 서버에 연결 요청
 - 실행 : ./base_client 127.0.0.1 9090
