@@ -196,7 +196,7 @@ if(connect(sock_fd, (struct sockaddr*)&server_addr, sizeof(server_addr)) == -1){
 - UDP는 ACK 없음. 
 
 #### TCP 연결(3 Way Handshake)
-<img src="./Image/nw0003.png" width="500">
+<img src="./Image/nw0003.png" width="600">
 
 - 클라이언트 -> 서버 : SYN(연결 요청)
 - 서버 -> 클라이언트 : SYN(연결 요청) + ACK(요청 수락)
