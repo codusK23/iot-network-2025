@@ -126,7 +126,7 @@ IoT 네트워크 프로그래밍 리포지토리
 
 ## 2일차
 ### OSI 7계층 TCP/IP 4계층 비교
-<img src="./Image/nw0001.png" width="600">
+<img src="./Image/nw0001.png" width="800">
 
 ### 소켓 구조체 
 #### 기본 구조
@@ -181,7 +181,7 @@ if(connect(sock_fd, (struct sockaddr*)&server_addr, sizeof(server_addr)) == -1){
 ## 3일차
 ### TCP
 #### TCP 동작 구조
-<img src="./Image/nw0002.png" width="450">
+<img src="./Image/nw0002.png" width="600">
 
 - 클라이언트 -> 서버 : 데이터 A 전송
 - 서버 -> 클라이언트 : ACK (A 수신 확인)
@@ -196,7 +196,7 @@ if(connect(sock_fd, (struct sockaddr*)&server_addr, sizeof(server_addr)) == -1){
 - UDP는 ACK 없음. 
 
 #### TCP 연결(3 Way Handshake)
-<img src="./Image/nw0003.png" width="450">
+<img src="./Image/nw0003.png" width="600">
 
 - 클라이언트 -> 서버 : SYN(연결 요청)
 - 서버 -> 클라이언트 : SYN(연결 요청) + ACK(요청 수락)
@@ -204,7 +204,7 @@ if(connect(sock_fd, (struct sockaddr*)&server_addr, sizeof(server_addr)) == -1){
 - 양측 연결 상태 확인 -> 데이터 송수신 시작
 
 #### TCP 연결 종료(4 Way Handshake)
-<img src="./Image/nw0004.png" width="450">
+<img src="./Image/nw0004.png" width="600">
 
 - 클라이언트 -> 서버 : FIN(종료 요청)
 - 서버 -> 클라이언트 : ACK(요청 수락)
@@ -269,7 +269,7 @@ if(connect(sock_fd, (struct sockaddr*)&server_addr, sizeof(server_addr)) == -1){
 - `select` 
     - 다수의 소켓을 동시에 감시. 비동기 입출력 가능
 
-    <img src="./Image/nw0005.png" width="450">
+    <img src="./Image/nw0005.png" width="800">
 
     - [echo_selects](./Socket/Chapter4/echo_selectsv.c)
         - 실행 : ./echo_selectsv 19090
