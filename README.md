@@ -268,6 +268,7 @@ if(connect(sock_fd, (struct sockaddr*)&server_addr, sizeof(server_addr)) == -1){
 
 - `select` 
     - 다수의 소켓을 동시에 감시. 비동기 입출력 가능
+    - 필요 헤더 파일 : <sys/select.h>
 
     <img src="./Image/nw0005.png" width="700">
 
@@ -286,3 +287,64 @@ if(connect(sock_fd, (struct sockaddr*)&server_addr, sizeof(server_addr)) == -1){
 
 
 ## 5일차
+### 다중 접속서버 (Multi-Client-Server)
+#### 멀티 프로세스 : 다수의 프로세스 생성
+#### 멀티 플렉싱 : 입출력 대상을 묶어서 동시 관리
+- `poll`
+    - 필요 헤더 파일 : <poll.h>
+    - select의 한계를 보완한 함수. fd 개수 제한 없음
+    - poll 구조체를 통해 각 fd마다 감시할 이벤트를 지정
+    - 모든 fd를 순회하기 때문에 fd 수가 많을수록 비효율
+
+- `epoll`
+    - 필요 헤더 파일 : <sys/epoll.h>
+    - Linux 전용으로 대규모 소켓 처리에 최적화
+    - 실무에서도 select/poll 보다는 거의 항상 epoll 사용.
+    
+    - 기본 동작 절차
+        1. epoll 인스턴스 생성 : epoll_create
+        2. 감시 대상 등록/삭제 : epoll_ctl with EPOLL_CTL_ADD/DEL
+        3. 이벤트 발생 대기 : epoll_wait
+
+     - epoll event 구조체
+        ```c
+        struct epoll_event{
+            uint32_t events;        // 감시할 이벤트
+            epoll_data_t data;      // FD 또는 사용자 정의 데이터
+        }
+        ```
+    - 주요 이벤트
+        - EPOLLIN : 읽기 가능. 데이터 수신 대기
+        - EPOLLOUT : 쓰기 가능
+        - EPOLLET : 엣지 트리거 모드. 이벤트 중복 방지
+        - EPOLLERR : 에러 발생
+        - EPOLLUP : 연결 끊김
+        - EPOLLRDHUP : 상대방 FIN 전송. 연결 종료 감지
+    
+    - epoll 트리거 방식
+        - Level-Triggered(LT) : 기본 값. 데이터가 남아있으면 계속 이벤트를 발생
+        - Edge-Triggered(ET) : 이벤트가 발생한 순간에만 알림. EPOLLET 명시 필요.
+
+#### 멀티 스레딩 : 클라이언트 수만큼 스레드 생성
+
+### 멀티캐스트와 브로드캐스트
+- 둘 다 UDP 기반 전송 방식. 1:N 통신 지원
+- `멀티캐스트`
+    - 1:N 통신. 라우터를 통해 멀티 네트워크에 전달
+    - IP 범위 : 224.0.0.0 ~ 239.255.255.255
+    - TTL(Time to Live) 필드를 가짐. 
+        - 라우터를 지날 때마다 TTL이 -1, TTL이 0이 되면 더이상 전파되지 않음(패킷의 무한루프 방지)
+    - 멀티캐스트 전송 범위 제어
+    - 관련 옵션 : IPPROTO_IP, IP_ADD_MEMBERSHIP
+    - 수신 : [multicastrecv](./Socket/Chapter5/multicastrecv.c)
+    - 송신 : [multicast](./Socket/Chapter5/multicast.c)
+
+- `브로드캐스트`
+    - 1:N 통신 (같은 네트워크 한정). 라우터 통과 못 함
+    - 브로드 캐스트 주소 : 255.255.255.255
+    - 관련 옵션 : SOL_SOCKET, SO_BROADCAST
+    - 수신 : [broadcastrecv](./Socket/Chapter5/broadcastrecv.c)
+    - 송신 : [broadcast](./Socket/Chapter5/broadcast.c)
+
+
+## 6일차
