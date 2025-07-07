@@ -348,3 +348,12 @@ if(connect(sock_fd, (struct sockaddr*)&server_addr, sizeof(server_addr)) == -1){
 
 
 ## 6일차
+- 스레드
+    - 멀티 프로세스보완
+    - pthread.h
+    - 다른 스레드가 종료될 때까지 메인 스레드가 기다려줌
+
+- mutex
+
+- semaphore
+- 코딩테스트
