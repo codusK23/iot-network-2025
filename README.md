@@ -2,7 +2,6 @@
 IoT 네트워크 프로그래밍 리포지토리 
 
 ## 1일차
-
 ### 소켓
 #### 소켓 통신 개념
 - 이더넷 방식 사용
@@ -348,12 +347,22 @@ if(connect(sock_fd, (struct sockaddr*)&server_addr, sizeof(server_addr)) == -1){
 
 
 ## 6일차
-- 스레드
-    - 멀티 프로세스보완
-    - pthread.h
-    - 다른 스레드가 종료될 때까지 메인 스레드가 기다려줌
+### 다중 접속서버 (Multi-Client-Server)
+#### 멀티 프로세스 : 다수의 프로세스 생성
+#### 멀티 플렉싱 : 입출력 대상을 묶어서 동시 관리
+#### 멀티 스레딩 : 클라이언트 수만큼 스레드 생성
+- `thread`
+    - 필요 헤더 파일 : <pthread.h>
+    - 멀티 프로세스 단점을 보완
+    - 스레드 생성 : pthread_create()
+    - pthread_join()으로 다른 스레드가 종료될 때까지 기다림
 
-- mutex
+- `mutex`
+    - 하나의 스레드만 임계 영역에 접근하도록 하는 동기화 도구
+    - 공유 자원에 대한 동시 접근을 막음
+    - pthread_mutex_init()/lock()/unlock()/destroy()
 
-- semaphore
-- 코딩테스트
+- `semaphore`
+    - 일정 개수의 스레드만 임계 영역에 접근할 수 있게 제한하는 동기화 도구
+    - 뮤텍스는 1개만 접근 가능하지만 세마포어는 N개까지 동시에 접근 가능
+    - sem_init()/wait()/post()/destroy()

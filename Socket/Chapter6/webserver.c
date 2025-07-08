@@ -10,8 +10,13 @@
 int main(int argc, char** argv)
 {
 	int serv_sock, clnt_sock;
-	struct sockaddr_in serv_addr;
+	int read_cnt;
 	char buf[BUF_SIZE];
+
+	struct sockaddr_in serv_addr, clnt_addr;
+	socklen_t clnt_addr_sz;
+
+	FILE* fp;
 
 	char webpage[] = "HTTP/1.1 200 OK\r\n"
 					"Server:Linux Web Server\r\n"
@@ -22,6 +27,12 @@ int main(int argc, char** argv)
 					"<body><center><h1>Hello World!</h1><br>\r\n"
 					"<img src=\"yeppi.jpg\" width=\"500\"></center></body></html>\r\n";
 
+	if(argc != 2){
+		printf("%s <port>\n", argv[0]);
+		exit(1);
+	}
+
+	fp =  fopen("yeppi.jpg", "rb");
 	serv_sock = socket(PF_INET, SOCK_STREAM, 0);
 	memset(&serv_addr, 0, sizeof(serv_addr));
 	serv_addr.sin_family = AF_INET;
@@ -40,24 +51,19 @@ int main(int argc, char** argv)
 		exit(1);
 	}
 
+	clnt_addr_sz = sizeof(clnt_addr);
+	clnt_sock = accept(serv_sock, (struct sockaddr*)&clnt_addr, &clnt_addr_sz);
+
 	while(1){
-		clnt_sock = accept(serv_sock, NULL, NULL);
-		int str_len = read(clnt_sock, buf, BUF_SIZE - 1);
-		buf[str_len] = 0;
-
 		if(strstr(buf, "GET /yeppi.jpg") != NULL){
-			FILE *fp = fopen("yeppi.jpg", "rb");
-
 			char img_header[] = "HTTP/1.1 200 OK\r\nContent-Type: image/jpeg\r\n\r\n";
-			write(clnt_sock, img_header, strlen(img_header));
+			write(clnt_sock, img_header, sizeof(img_header));
 
-			char img_buf[BUF_SIZE];
-			int read_bytes;
-			while((read_bytes = fread(img_buf, 1, BUF_SIZE, fp)) > 0)
-				write(clnt_sock, img_buf, read_bytes);
+			while((read_cnt = fread(buf, 1, BUF_SIZE, fp)) > 0)
+				write(clnt_sock, buf, read_cnt);
 			fclose(fp);
 		} else{
-			write(clnt_sock, webpage, strlen(webpage));
+			write(clnt_sock, webpage, sizeof(webpage));
 		}
 
 		close(clnt_sock);
